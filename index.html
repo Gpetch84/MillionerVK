@@ -60,7 +60,7 @@
     <div id="unity-progress-bar">
     </div>
 </div>
-<script src="Build/vkmilliomer1.loader.js"></script>
+<script src="Build/millioner-build.loader.js"></script>
 <script>
     const maxPixelRatioMobile = 2.0;
     const maxPixelRatioDesktop = 1.5;
@@ -70,15 +70,15 @@
     var pixelRatio = Math.min(window.devicePixelRatio, maxDevicePixelRatio);
 
     var buildUrl = "Build";
-    var loaderUrl = buildUrl + "/vkmilliomer1.loader.js";
+    var loaderUrl = buildUrl + "/millioner-build.loader.js";
     var config = {
-        dataUrl: buildUrl + "/vkmilliomer1.data.unityweb",
-        frameworkUrl: buildUrl + "/vkmilliomer1.framework.js.unityweb",
-        codeUrl: buildUrl + "/vkmilliomer1.wasm.unityweb",
+        dataUrl: buildUrl + "/millioner-build.data.unityweb",
+        frameworkUrl: buildUrl + "/millioner-build.framework.js.unityweb",
+        codeUrl: buildUrl + "/millioner-build.wasm.unityweb",
         streamingAssetsUrl: "StreamingAssets",
-        companyName: "cbycsoft",
+        companyName: "DefaultCompany",
         productName: "Millioner",
-        productVersion: "1.6",
+        productVersion: "1.0",
         devicePixelRatio: pixelRatio
     };
 
@@ -125,12 +125,16 @@
     function showAd(adFormat, waterfall) {
 
         const bridge = vkBridge.default;
-        bridge.send("VKWebAppShowNativeAds", {ad_format: adFormat, use_waterfall: waterfall});
+        //bridge.send("VKWebAppShowNativeAds", {ad_format: adFormat, use_waterfall: waterfall});
+        bridge.send("VKWebAppShowNativeAds", {
+            ad_format: 'interstitial' /* Тип рекламы */
+        })
         bridge.subscribe((e) => {
             if (e.detail.type == 'VKWebAppShowNativeAdsResult' && e.detail.data.result == true) {
                 ss.SendMessage('VkBridge', 'ShowAdsResult', 'good');
             }
             if (e.detail.type == 'VKWebAppShowNativeAdsFailed') {
+                console.log(e.detail.data)
                 ss.SendMessage('VkBridge', 'ShowAdsResult', 'noGood');
             }
         });
